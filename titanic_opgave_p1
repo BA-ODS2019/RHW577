@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Sep 19 15:30:35 2019
+
+@author: torkellingvarsson
+"""
+
+import pandas as pd
+
+# Opg. 2:
+df_titanic = pd.read_csv("titanic.csv")
+df_titanic
+# indlæser titanic.csv filen
+
+df_titanic.describe()
+df_titanic.info()
+# beskriver grundlæggende information om DataFrame
+
+print(df_titanic.shape)
+print(df_titanic.columns)
+print(df_titanic.dtypes)
+# printer størrelse, kolonne navne og data-typer i DataFrame
+
+# Opg. 3
+
+# Antal overlevende:
+print(df_titanic['Survived'].count())
+
+df_titanic['Survived'].describe()
+df_titanic['Name'].describe()
+
+# Gennemsnitsalder
+print(df_titanic['Age'].mean()) # = 29.471
+
+# median alder på personer
+print(df_titanic['Age'].median()) # = 28.0
+
+# ældste & yngste
+print(df_titanic['Age'].max()) # = 80
+print(df_titanic['Age'].min()) # = 0.42
+
+df_titanic['Survived'].nunique()
