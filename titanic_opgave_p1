@@ -42,6 +42,7 @@ print(df_titanic['Age'].min()) # = 0.42
 # Pivot table:
 import numpy as np
 
-pd.pivot_table(df_titanic, index = ['Pclass'], aggfunc=np.sum)
+#pd.pivot_table(df_titanic, index = ['Name'], values = ['Pclass'], aggfunc=np.sum)
 
 pd.pivot_table(df_titanic, index = ["Pclass"], values = ["Survived"], aggfunc=np.sum)
+# Pivot der viser antal overlevende pr. rejse klasse
