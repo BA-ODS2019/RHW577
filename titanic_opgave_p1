@@ -25,10 +25,9 @@ print(df_titanic.dtypes)
 # Opg. 3
 
 # Antal overlevende:
-print(df_titanic['Survived'].count())
-
-df_titanic['Survived'].describe()
-df_titanic['Name'].describe()
+survivers = df_titanic[(df_titanic['Survived']== 1)]
+survivers
+# 342 rows med værdien '1' som betyder overlevet = 342 overlevende
 
 # Gennemsnitsalder
 print(df_titanic['Age'].mean()) # = 29.471
@@ -40,4 +39,9 @@ print(df_titanic['Age'].median()) # = 28.0
 print(df_titanic['Age'].max()) # = 80
 print(df_titanic['Age'].min()) # = 0.42
 
-df_titanic['Survived'].nunique()
+# Pivot table:
+import numpy as np
+
+pd.pivot_table(df_titanic, index = ['Pclass'], aggfunc=np.sum)
+
+pd.pivot_table(df_titanic, index = ["Pclass"], values = ["Survived"], aggfunc=np.sum)
