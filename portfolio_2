@@ -119,7 +119,7 @@ target_length = list(zip(texts, all_lengths))
 print("target_length head: %s" % target_length[:5])
 pd.DataFrame(target_length).groupby(0, as_index=True).sum()
 
-# word count (simple tokenization)
+# word count (simple tokenization) 
 word_count = 0
 for text in texts:
     words = text.split()
