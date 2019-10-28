@@ -97,7 +97,22 @@ print("Number of ids: %d" % len(ids))
 print("Number of texts: %d" % len(texts))
 
 # Assignment 2
-# variables : texts is a list of all the texts
+# variables : 'texts' is a list of all the texts
+
+len(texts)
+
+total = 0
+for text in texts:
+    total = total + len(text)
+total
+
+all_lengths = list()
+for text in texts:
+    all_lengths.append(len(text))
+print("Total sum: %i" % sum(all_lengths))
+
+from scipy import stats 
+stats.describe(all_lengths)
 
 import nltk
 nltk.download('stopwords')
@@ -105,7 +120,7 @@ nltk.download('stopwords')
 # second, CountVectorizer, creates document-term matrix
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords as sw
-model_vect = CountVectorizer(stop_words=sw.words('english'), token_pattern=r'[a-zA-Z\-][a-zA-Z\-]{2,}')
+model_vect = CountVectorizer(stop_words=sw.words('english'), token_pattern=r'[a-zA-Z\-][a-zA-Z\-]{2,}', max_features=10000)
 data_vect = model_vect.fit_transform(texts)
 data_vect
 
@@ -113,3 +128,10 @@ data_vect
 import random
 random.sample(model_vect.get_feature_names(), 10)
 
+counts = data_vect.sum(axis=0).A1
+top_idxs = (-counts).argsort()[:10]
+top_idxs
+
+inverted_vocabulary = dict([(idx, word) for word, idx in model_vect.vocabulary_.items()])
+top_words = [inverted_vocabulary[idx] for idx in top_idxs]
+print("Top words: %s" % top_words)
