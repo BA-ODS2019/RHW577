@@ -101,23 +101,7 @@ print("Number of texts: %d" % len(texts))
 
 
 # describtion of the texts (length etc.):
-total = 0
-for text in texts:
-    total = total + len(text)
-total
 
-all_lengths = list()
-for text in texts:
-    all_lengths.append(len(text))
-print("Total sum: %i" % sum(all_lengths))
-
-from scipy import stats 
-stats.describe(all_lengths)
-
-import pandas as pd
-target_length = list(zip(texts, all_lengths))
-print("target_length head: %s" % target_length[:5])
-pd.DataFrame(target_length).groupby(0, as_index=True).sum()
 
 # word count (simple tokenization) 
 word_count = 0
@@ -125,6 +109,16 @@ for text in texts:
     words = text.split()
     word_count = word_count + len(words)
 word_count
+
+# word count + unique word count
+all_words = list()
+for text in texts:
+  words = text.split()
+  all_words.extend(words)
+print("Word count: %i" % len(all_words))
+unique_words = set(all_words)
+unique_word_count = len(unique_words)
+print("Unique word count: %i" % unique_word_count)
 
 import nltk
 nltk.download('stopwords')
