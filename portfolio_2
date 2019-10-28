@@ -114,6 +114,18 @@ print("Total sum: %i" % sum(all_lengths))
 from scipy import stats 
 stats.describe(all_lengths)
 
+import pandas as pd
+target_length = list(zip(texts, all_lengths))
+print("target_length head: %s" % target_length[:5])
+pd.DataFrame(target_length).groupby(0, as_index=True).sum()
+
+# word count (simple tokenization)
+word_count = 0
+for text in texts:
+    words = text.split()
+    word_count = word_count + len(words)
+word_count
+
 import nltk
 nltk.download('stopwords')
 
