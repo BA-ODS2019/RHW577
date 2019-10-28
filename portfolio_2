@@ -6,6 +6,8 @@ Created on Mon Oct 28 12:13:48 2019
 @author: torkellingvarsson
 """
 
+# Assignment 1
+
 import json
 import requests
 from os import makedirs
@@ -39,8 +41,8 @@ my_params = {
 # http://stackoverflow.com/questions/7274267/print-all-day-dates-between-two-dates
 
 # Update these dates to suit your own needs.
-start_date = date(2019, 10, 28)
-end_date = date(2019,7, 1)
+start_date = date(2019, 7, 1)
+end_date = date(2019,10, 27)
 
 dayrange = range((end_date - start_date).days + 1)
 for daycount in dayrange:
@@ -93,3 +95,21 @@ for filename in os.listdir(directory_name):
 
 print("Number of ids: %d" % len(ids))
 print("Number of texts: %d" % len(texts))
+
+# Assignment 2
+# variables : texts is a list of all the texts
+
+import nltk
+nltk.download('stopwords')
+
+# second, CountVectorizer, creates document-term matrix
+from sklearn.feature_extraction.text import CountVectorizer
+from nltk.corpus import stopwords as sw
+model_vect = CountVectorizer(stop_words=sw.words('english'), token_pattern=r'[a-zA-Z\-][a-zA-Z\-]{2,}')
+data_vect = model_vect.fit_transform(texts)
+data_vect
+
+# gives a random selection of terms
+import random
+random.sample(model_vect.get_feature_names(), 10)
+
