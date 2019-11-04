@@ -83,6 +83,7 @@ directory_name = "theguardian/collection/"
 
 ids = list()
 texts = list()
+sections = list()
 for filename in os.listdir(directory_name):
     if filename.endswith(".json"):
         with open(directory_name + filename) as json_file:
@@ -93,6 +94,8 @@ for filename in os.listdir(directory_name):
                 text = fields['bodyText'] if fields['bodyText'] else ""
                 ids.append(id)
                 texts.append(text)
+                section = article['sectionId']	# Id name each article gets by The Guardian
+                sections.append(section) # Adding each item to a list as above "sections = list()"
 
 print("Number of ids: %d" % len(ids))
 print("Number of texts: %d" % len(texts))
@@ -123,6 +126,14 @@ print("Unique word count: %i" % unique_word_count)
 
 import nltk
 nltk.download('stopwords')
+
+idxes = []
+subtexts = []
+for i, section in enumerate(sections):
+    if section in ['news','world news']:
+        idxes.append(i)
+        subtexts.append(texts[i])
+len(idxes)
 
 # second, CountVectorizer, creates document-term matrix
 from sklearn.feature_extraction.text import CountVectorizer
@@ -173,7 +184,7 @@ df
 # define some terms for a query
 # Why does it not show my term counts? Seems to show term count for Hong Kong
 # in a long array, instead of one value?
-terms = ['Hong Kong', 'protests']
+terms = ['Hong Kong', 'protests', 'masked', 'extradition', 'china']
 terms
 
 term_idxs = [model_vect.vocabulary_.get(term) for term in terms]
@@ -201,7 +212,12 @@ sims_sorted_idx = (-sims).argsort()
 sims_sorted_idx
 
 # article with the best match for the query
+# changing the value  e.g. [0,25000] will show a text
+# far down the line of 'relevant texts' in relation to the query of Hong Kong
 texts[sims_sorted_idx[0,0]]
+
+# https://www.theguardian.com/world/2019/jul/24/hong-kong-protests-china-blames-black-hands-of-us-for-unrest
+# ^ most relevant article for the query
 
 print("Shape of 2-D array sims: (%i, %i)" % (len(sims), len(sims[0,:])) )
 df = pd.DataFrame(data=zip(sims_sorted_idx[0,:], sims[0,sims_sorted_idx[0,:]]), columns=["index", "cosine_similarity"])
@@ -209,7 +225,7 @@ df[0:10]
 
 
 
-
+# LDA topic modelling:
 
 
 
