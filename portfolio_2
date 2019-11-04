@@ -141,7 +141,7 @@ len(idxes)
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords as sw
 model_vect = CountVectorizer(stop_words=sw.words('english'), token_pattern=r'[a-zA-Z\-][a-zA-Z\-]{2,}', max_features=10000)
-data_vect = model_vect.fit_transform(texts)
+data_vect = model_vect.fit_transform(subtexts)
 data_vect
 
 # gives a random selection of terms
@@ -162,7 +162,7 @@ model_tfidf = TfidfTransformer()
 data_tfidf = model_tfidf.fit_transform(data_vect)
 
 import random
-some_row_idxs = random.sample(range(0,len(texts)), 10)
+some_row_idxs = random.sample(range(0,len(subtexts)), 10)
 print("Selection: (%s x %s)" % (some_row_idxs, top_idxs))
 sub_matrix = data_vect[some_row_idxs, :][:, top_idxs].todense()
 sub_matrix
@@ -216,10 +216,8 @@ sims_sorted_idx
 # article with the best match for the query
 # changing the value  e.g. [0,25000] will show a text
 # far down the line of 'relevant texts' in relation to the query of Hong Kong
-texts[sims_sorted_idx[0,0]]
+subtexts[sims_sorted_idx[0,0]]
 
-# https://www.theguardian.com/world/2019/jul/24/hong-kong-protests-china-blames-black-hands-of-us-for-unrest
-# ^ most relevant article for the query
 
 print("Shape of 2-D array sims: (%i, %i)" % (len(sims), len(sims[0,:])) )
 df = pd.DataFrame(data=zip(sims_sorted_idx[0,:], sims[0,sims_sorted_idx[0,:]]), columns=["index", "cosine_similarity"])
@@ -227,10 +225,19 @@ df[0:10]
 
 
 
-# LDA topic modelling:
+# LDA topic modelling on the subset from the dataset
+from sklearn.decomposition import LatentDirichletAllocation
+model_lda = LatentDirichletAllocation(n_components=4, random_state=0)
+data_lda = model_lda.fit_transform(data_vect)
+# shape of the topic modelling 
+import numpy as np
+np.shape(data_lda)
 
-
-
+# the top terms and the weight of the terms
+for i, term_weights in enumerate(model_lda.components_):
+    top_idxs = (-term_weights).argsort()[:10]
+    top_words = ["%s (%.3f)" % (model_vect.get_feature_names()[idx], term_weights[idx]) for idx in top_idxs]
+    print("Topic %d: %s" % (i, ", ".join(top_words)))
 
 
 
