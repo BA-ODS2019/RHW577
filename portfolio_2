@@ -13,6 +13,7 @@ import requests
 from os import makedirs
 from os.path import join, exists
 from datetime import date, timedelta
+import pandas as pd
 
 # This creates two subdirectories called "theguardian" and "collection"
 ARTICLES_DIR = join('theguardian', 'collection')
@@ -141,3 +142,87 @@ top_idxs
 inverted_vocabulary = dict([(idx, word) for word, idx in model_vect.vocabulary_.items()])
 top_words = [inverted_vocabulary[idx] for idx in top_idxs]
 print("Top words: %s" % top_words)
+
+
+from sklearn.feature_extraction.text import TfidfTransformer
+model_tfidf = TfidfTransformer()
+data_tfidf = model_tfidf.fit_transform(data_vect)
+
+import random
+some_row_idxs = random.sample(range(0,len(texts)), 10)
+print("Selection: (%s x %s)" % (some_row_idxs, top_idxs))
+sub_matrix = data_vect[some_row_idxs, :][:, top_idxs].todense()
+sub_matrix
+
+# top 10 terms based on TF-IDF 
+# >>
+from sklearn.feature_extraction.text import TfidfTransformer
+model_tfidf = TfidfTransformer()
+data_tfidf = model_tfidf.fit_transform(data_vect)
+
+freqs = data_tfidf.mean(axis=0).A1
+top_idxs = (-freqs).argsort()[:10].tolist()
+top_words = [inverted_vocabulary[idx] for idx in top_idxs]
+(top_idxs, top_words)
+# <<
+
+sub_matrix = data_tfidf[some_row_idxs, :][:,top_idxs].todense()
+df = pd.DataFrame(columns=top_words, index=some_row_idxs, data=sub_matrix)
+df
+
+# define some terms for a query
+# Why does it not show my term counts? Seems to show term count for Hong Kong
+# in a long array, instead of one value?
+terms = ['Hong Kong', 'protests']
+terms
+
+term_idxs = [model_vect.vocabulary_.get(term) for term in terms]
+term_counts = [counts[idx] for idx in term_idxs]
+term_counts
+
+idfs = model_tfidf.idf_
+term_idfs = [idfs[idx] for idx in term_idxs]
+term_idfs
+
+
+# create variable for query, based on selected terms
+query = " ".join(terms)
+query
+
+query_vect_counts = model_vect.transform([query])
+query_vect = model_tfidf.transform(query_vect_counts)
+query_vect
+
+from sklearn.metrics.pairwise import cosine_similarity
+sims = cosine_similarity(query_vect, data_tfidf)
+sims
+
+sims_sorted_idx = (-sims).argsort()
+sims_sorted_idx
+
+# article with the best match for the query
+texts[sims_sorted_idx[0,0]]
+
+print("Shape of 2-D array sims: (%i, %i)" % (len(sims), len(sims[0,:])) )
+df = pd.DataFrame(data=zip(sims_sorted_idx[0,:], sims[0,sims_sorted_idx[0,:]]), columns=["index", "cosine_similarity"])
+df[0:10]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
