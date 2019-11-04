@@ -127,6 +127,7 @@ print("Unique word count: %i" % unique_word_count)
 import nltk
 nltk.download('stopwords')
 
+# creating subset of the dataset, our query is for Hong Kong protests, so we make it only look at news and world news
 idxes = []
 subtexts = []
 for i, section in enumerate(sections):
