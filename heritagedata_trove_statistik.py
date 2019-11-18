@@ -66,7 +66,8 @@ df.loc[: , "count"].mean()
 
     # MEDIAN
 
-# 
+# median af DF
+df.median()
 
 
 
