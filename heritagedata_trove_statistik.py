@@ -22,10 +22,9 @@ params = {
         'q': 'mahatma+gandhi',
         'zone': 'newspaper',
         'key': api_key,
-        'n': '100',
+        'n': 0,
         'encoding': 'json',
         'facet': 'year',
-        'n': 0
         }
 response = requests.get(api_search_url, params=params)
 print (response)
@@ -35,3 +34,40 @@ json = response.json()
 # laver nu en dataframe via pandas
 df = json_normalize(json['response']['zone'][0]['facets']['facet']['term'])
 df.head()
+
+# hvilke datatypes har vi med at gøre
+df.dtypes
+
+# ændre "count" column til numerisk data type
+df['count'] = pd.to_numeric(df['count'])
+
+# før var "count" = object, nu er den int64
+df.dtypes
+
+# nu skal columns "search" og "url" fjernes
+df.drop(['search', 'url'], inplace=True, axis=1)
+
+# derefter skal "display" column ændres til "year"
+df.rename(columns={'display':'year'}, inplace=True)
+
+# vis formateret DF:
+df.head
+# nu er der bare count og year tilbage som columns
+# nu er der kun numeriske values tilbage som man kan beregne på
+# se tutorial kode med mean/median/mode beregninger
+
+    # MEAN
+
+# mean for hele DF
+df.mean()
+
+# mean for specfik column
+df.loc[: , "count"].mean()
+
+    # MEDIAN
+
+# 
+
+
+
+
