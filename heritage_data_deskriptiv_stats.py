@@ -8,7 +8,7 @@ Created on Mon Nov 18 13:37:06 2019
 import pandas as pd
 import numpy as np
 
-# calculate arithmetic mean
+# MEAN UDREGNING 
 import statistics
  
 print(statistics.mean([1,9,5,6,6,7]))
@@ -62,3 +62,44 @@ df2.median(axis=1)
 
 # median of the specific column
 df2.loc[:,"Score1"].median()
+
+
+# MODE UDREGNING
+
+
+# calculate mode or most repeated value
+
+
+print(statistics.mode([1,5,5,7,5,6,8,7]))
+print(statistics.mode(['lion', 'cat', 'cat','dog','tiger']))
+
+#Create a DataFrame
+d3 = {
+    'Name':['Alisa','Bobby','Cathrine','Madonna','Rocky','Sebastian','Jaqluine',
+   'Rahul','David','Andrew','Ajay','Teresa'],
+   'Score1':[62,47,55,74,47,77,85,63,42,32,71,57],
+   'Score2':[89,87,67,55,47,72,76,79,44,67,99,69],
+   'Score3':[56,86,77,45,73,62,74,89,71,67,97,68]}
+ 
+ 
+ 
+df3 = pd.DataFrame(d3)
+df3
+
+df3.mode()
+
+df3.mode(axis=0)
+
+
+# mode of the specific column
+df3.loc[:,"Score1"].mode()
+
+
+
+
+
+
+
+
+
+
