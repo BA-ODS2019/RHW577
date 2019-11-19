@@ -8,7 +8,7 @@ Created on Mon Nov 18 13:37:06 2019
 import pandas as pd
 import numpy as np
 
-# MEAN UDREGNING 
+    # MEAN UDREGNING 
 import statistics
  
 print(statistics.mean([1,9,5,6,6,7]))
@@ -37,7 +37,7 @@ df.mean(axis=1)
 # mean of the specific column
 df.loc[:,"Score1"].mean()
 
-# MEDIAN UDREGNING
+    # MEDIAN UDREGNING
 
 # calculate median or middle value
  
@@ -64,7 +64,7 @@ df2.median(axis=1)
 df2.loc[:,"Score1"].median()
 
 
-# MODE UDREGNING
+    # MODE UDREGNING
 
 
 # calculate mode or most repeated value
@@ -95,9 +95,31 @@ df3.mode(axis=0)
 df3.loc[:,"Score1"].mode()
 
 
+    # Descriptive / Summary stats i pandas
+    
+# creation of DataFrame
 
+ 
+#Create a Dictionary of series
+d4 = {'Name':pd.Series(['Alisa','Bobby','Cathrine','Madonna','Rocky','Sebastian','Jaqluine',
+   'Rahul','David','Andrew','Ajay','Teresa']),
+   'Age':pd.Series([26,27,25,24,31,27,25,33,42,32,51,47]),
+   'Score':pd.Series([89,87,67,55,47,72,76,79,44,92,99,69])}
+ 
+#Create a DataFrame
+df4 = pd.DataFrame(d4)
+print(df4)
 
+# Describe funktion
+print(df4.describe())
 
+# summary statistics of character column
+ 
+print (df4.describe(include=['object']))
+
+# summary statistics of character column
+ 
+print (df4.describe(include='all'))
 
 
 
