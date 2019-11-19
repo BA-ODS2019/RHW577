@@ -69,6 +69,12 @@ df.loc[: , "count"].mean()
 # median af DF
 df.median()
 
+    # summary stats
+df.describe()
 
+    # MODE
+df.mode(axis=1)
+# Giver nogle mærklige værdier, bl.a. nogle NaN værdier
+# anderledes værdier også ved at skrive axis=0
 
 
