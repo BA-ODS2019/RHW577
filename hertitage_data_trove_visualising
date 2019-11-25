@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Nov 25 14:54:12 2019
+
+@author: torkellingvarsson
+"""
+
+# import the requests module 
+import requests
+# import pandas
+import pandas as pd
+# import numpy
+import numpy as np
+# import json normalize module
+from pandas.io.json import json_normalize
+
+# a variable called 'api_key', paste your key between the quotes instead of xxxx
+api_key = '6majqpp3si922qkj'
+
+# a variable for the API URL - note that we are using v2 - version 2
+api_search_url = 'https://api.trove.nla.gov.au/v2/result'
+
+# a dictionary called 'params' setting the parameters we will send to the API
+params = {
+    'q': 'mahatma+gandhi', # searching for mentions of Mahatma Gandhi, the + is instead of a space
+    'zone': 'newspaper', # we are searching in newspapers
+    'key': api_key,
+    'facet': 'year',
+    'encoding': 'json', # we want the data returned as json
+    'n': 0 # We don't need any records, just the facets!
+}
+# retrieves the response for the URL and parameters we are sending
+response = requests.get(api_search_url, params=params)
+
+# print the response
+print(response)
+# the response is 200 - which means all is OK
+
+# retrieve the JSON from the response variable and add to the json variable
+json = response.json()
+
+# flatten the JSON file object "article" into a dataframe called df
+df = json_normalize(json['response']['zone'][0]['facets']['facet']['term'])
+
+# check the first 5 rows
+df.head()
+
+# Check the datatypes
+df.dtypes
+
+# change count to numeric
+df['count'] = pd.to_numeric(df['count'])
+
+# Check the datatypes
+df.dtypes
+
+# drop the columns 'count' and 'url' in the dataframe
+df.drop(['search', 'url'], inplace=True, axis=1)
+
+# rename the column "display" to "year"
+df.rename(columns={'display':'year'}, inplace=True)
+
+# view the first 5 rows of the df
+df.head()
+
+# import the altair code library
+import altair as alt
+alt.renderers.enable('notebook') # hvis I bruger Jupyter Notebook
+
+# create a line plot
+alt.Chart(df).mark_line(point=True).encode(
+        # Years on the X axis with encoding data type Q for quantitative and format c to display without decimal
+        x=alt.X('year:Q', axis=alt.Axis(format='c', title='Year')),
+    
+        # Number of articles on the Y axis  with encoding data type Q for quantitative
+        y=alt.Y('count:Q', axis=alt.Axis(title='Number of articles')),
+    
+    # determine the width and hight  
+    ).properties(width=700, height=300)
+
