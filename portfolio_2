@@ -186,7 +186,7 @@ df
 # define some terms for a query
 # Why does it not show my term counts? Seems to show term count for Hong Kong
 # in a long array, instead of one value?
-terms = ['Hong Kong', 'protests', 'masked', 'extradition', 'china']
+terms = ['Hong', 'Kong', 'protests', 'masked', 'protest', 'extradition', 'china', 'police']
 terms
 
 term_idxs = [model_vect.vocabulary_.get(term) for term in terms]
